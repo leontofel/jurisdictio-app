@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: database_name
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - /media/leon/8a0c0418-f9ec-4c3d-be65-8a71691dd04b/mysql_data
+      #- /media/leon/PortableSSD/mysql_data:/var/lib/mysql
+
+
