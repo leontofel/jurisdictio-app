@@ -3,6 +3,7 @@ package handler
 import (
 	"justice-app/internal/model"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +43,8 @@ func Login(c *gin.Context) {
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
 	// Generate token
-	tokenString, err := token.SignedString([]byte("secret"))
+	secret := []byte(os.Getenv("JWT_SECRET"))
+	tokenString, err := token.SignedString(secret)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, "Could not generate token")
