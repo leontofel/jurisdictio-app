@@ -10,3 +10,7 @@ type Answer struct {
 	CreatedAt  time.Time `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt  time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (Answer) TableName() string {
+	return "answers"
+}

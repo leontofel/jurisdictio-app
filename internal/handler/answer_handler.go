@@ -2,6 +2,7 @@ package handler
 
 import (
 	"justice-app/internal/model"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,6 +30,21 @@ func GetAnswerByID(c *gin.Context) {
 	c.JSON(200, answers)
 }
 
+func GetUserAnswersByQuestionID(c *gin.Context) {
+	var answers []model.Answer
+	offset, err := strconv.Atoi(c.Param("offset"))
+	if err != nil {
+		offset = 0
+	}
+
+	if err := db.Where("question_id = ?", c.Param("id")).Order(c.Param("order")).Offset(offset).Limit(10).Find(&answers).Error; err != nil {
+		log.Error("Error fetching answers: ", err)
+		c.JSON(400, gin.H{"error": "Failed to create answer"})
+		return
+	}
+	c.JSON(200, answers)
+}
+
 func GetUserAnswers(c *gin.Context) {
 	userID, exists := c.Get("id")
 	if !exists {
@@ -36,8 +52,13 @@ func GetUserAnswers(c *gin.Context) {
 		return
 	}
 
+	offset, err := strconv.Atoi(c.Param("offset"))
+	if err != nil {
+		offset = 0
+	}
+
 	var answers []model.Answer
-	if err := db.Where("author_id = ?", userID).Find(&answers).Error; err != nil {
+	if err := db.Where("author_id = ?", userID).Order(c.Param("order")).Offset(offset).Limit(10).Find(&answers).Error; err != nil {
 		log.Error("Error retrieving user answers: ", err)
 		c.JSON(500, gin.H{"error": "Failed to retrieve user answers"})
 		return

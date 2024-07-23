@@ -12,3 +12,6 @@ type Question struct {
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
 
+func (Question) TableName() string {
+	return "questions"
+}

@@ -48,10 +48,12 @@ func SetupRouter(jwtSecret string) *gin.Engine {
 		authorized.POST("/question", handler.CreateQuestion)
 		authorized.GET("/question", handler.GetUserQuestions)
 		authorized.GET("/question/:id", handler.GetQuestionByID)
+		authorized.GET("/question/unanswered", handler.GetUnansweredQuestions)
 
 		// answer
 		authorized.POST("/answer", handler.CreateAnswer)
-		authorized.GET("/answer/:id", handler.GetUserAnswers)
+		authorized.GET("/answer/:id", handler.GetAnswerByID)
+		authorized.GET("/answer/question/:id", handler.GetUserAnswersByQuestionID)
 		authorized.GET("/answer", handler.GetUserAnswers)
 	}
 
